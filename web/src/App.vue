@@ -1,35 +1,22 @@
 <template>
-  <div>
-    <div>name:{{ bot_name }}</div>
-    <div>id: {{ bot_id }}</div>
-  </div>
+  <NavBar/>
+  <router-view></router-view>
 </template>
 <script>
-import $ from "jquery";
-import {ref} from "vue";
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/js/bootstrap"
+import NavBar from './components/NavBar.vue'
 
 export default{
-  name:"app",
-  setup: () => {
-    let bot_name = ref("")
-    let bot_id = ref("")
-
-    $.ajax({
-      url: "http://localhost:8081/bot/getInfo",
-      type: "get",
-      success: resp => {
-        bot_name.value = resp.name,
-        bot_id.value = resp.id
-      }
-    })
-    return {
-      bot_name,
-      bot_id
-    }
+  components: {
+    NavBar
   }
 }
 
 </script>
 <style>
-
+body{
+  background-image: url('./assets/images/background.jpg');
+  background-size: cover;
+}
 </style>
