@@ -1,0 +1,2 @@
+Mysql:
+  DNS: root:123456@tcp(120.53.124.80:3306)/kob?charset=utf8mb4&parseTime=True&loc=Local

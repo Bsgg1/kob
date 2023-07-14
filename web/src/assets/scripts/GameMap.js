@@ -72,7 +72,7 @@ export class GameMap extends GameObject {
                 k--;
             }
             for (let i = 0; i < k; i++) {
-                if (cell.r == snake.cells[i].r && cell.c == snake.cells[i].c) return false;
+                if (cell.r === snake.cells[i].r && cell.c === snake.cells[i].c) return false;
             }
         }
         return true;

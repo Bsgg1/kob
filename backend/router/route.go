@@ -27,5 +27,10 @@ func Run() {
 	{
 		botGroup.GET("/getInfo", controller.GetInfo)
 	}
+	userGroup := r.Group("/user")
+	{
+		userGroup.GET("/all", controller.GetAllUser)
+		userGroup.GET("/:id", controller.GetUserById)
+	}
 	r.Run(":8081") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
