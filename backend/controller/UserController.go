@@ -32,3 +32,18 @@ func GetUserById(c *gin.Context) {
 	}
 	c.JSON(200, res)
 }
+
+func Login(c *gin.Context) {
+	name := c.Param("name")
+	password := c.Param("password")
+	if name == "" || password == "" {
+		c.JSON(200, "valid request")
+		return
+	}
+	err := service.Login(name, password)
+	if err != nil {
+		c.JSON(200, err.Error())
+		return
+	}
+	c.JSON(200, "success")
+}

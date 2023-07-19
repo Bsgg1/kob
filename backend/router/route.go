@@ -29,6 +29,7 @@ func Run() {
 	}
 	userGroup := r.Group("/user")
 	{
+		userGroup.GET("/login", controller.Login)
 		userGroup.GET("/all", controller.GetAllUser)
 		userGroup.GET("/:id", controller.GetUserById)
 	}
