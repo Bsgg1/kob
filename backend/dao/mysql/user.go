@@ -37,3 +37,12 @@ func UpdateUser(model interface{}, fields map[string]interface{}) error {
 
 	return nil
 }
+
+func CreateUser(name, password string) (*model.User, error) {
+	user := &model.User{Name: name, Password: password}
+	err := DB.Create(user).Error
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}

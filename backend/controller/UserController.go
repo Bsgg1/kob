@@ -34,16 +34,40 @@ func GetUserById(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	name := c.Param("name")
-	password := c.Param("password")
+	name := c.Query("name")
+	password := c.Query("password")
 	if name == "" || password == "" {
-		c.JSON(200, "valid request")
+		c.JSON(200, gin.H{
+			"error":    "valid request",
+			"name":     name,
+			"password": password,
+		})
 		return
 	}
-	err := service.Login(name, password)
+	token, err := service.Login(name, password)
 	if err != nil {
 		c.JSON(200, err.Error())
 		return
 	}
-	c.JSON(200, "success")
+	c.JSON(200, gin.H{
+		"token": token,
+	})
+}
+
+func Register(c *gin.Context) {
+	name := c.PostForm("name")
+	psd := c.PostForm("password")
+	repsd := c.PostForm("repassword")
+	if name == "" || psd == "" || repsd == "" || psd != repsd {
+		c.JSON(200, "request error")
+		return
+	}
+	token, err := service.Register(name, psd)
+	if err != nil {
+		c.JSON(200, err)
+		return
+	}
+	c.JSON(200, gin.H{
+		"token": token,
+	})
 }

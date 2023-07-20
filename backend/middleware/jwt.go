@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"backend/common"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -65,13 +64,11 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-			}
+
 			return []byte(common.JWT_secret), nil
 		})
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "details": err.Error()})
 			c.Abort()
 			return
 		}
@@ -82,21 +79,22 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user ID from token"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "111Failed to get user ID from token"})
 			c.Abort()
 			return
 		}
-		userId, ok := claims["user_id"].(int64)
+		userId, ok := claims["user_id"].(float64)
+		userID := int64(userId)
 		if !ok {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user ID from token"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "222Failed to get user ID from token"})
 			c.Abort()
 			return
 		}
-		c.Set("user_id", userId)
+		c.Set("user_id", userID)
 		expTime := time.Unix(int64(claims["exp"].(float64)), 0)
 		refreshTime := expTime.Add(-time.Minute * 5) // 在过期前5分钟刷新Token
 		if time.Now().After(refreshTime) {
-			refreshToken, err := GenerateRefreshToken(userId)
+			refreshToken, err := GenerateRefreshToken(userID)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to refresh token"})
 				c.Abort()

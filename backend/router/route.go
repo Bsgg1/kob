@@ -2,6 +2,7 @@ package router
 
 import (
 	"backend/controller"
+	"backend/middleware"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -30,8 +31,12 @@ func Run() {
 	userGroup := r.Group("/user")
 	{
 		userGroup.GET("/login", controller.Login)
-		userGroup.GET("/all", controller.GetAllUser)
+		userGroup.POST("/register", controller.Register)
 		userGroup.GET("/:id", controller.GetUserById)
+	}
+	auth := r.Group("/auth").Use(middleware.AuthMiddleware())
+	{
+		auth.GET("/all", controller.GetAllUser)
 	}
 	r.Run(":8081") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
