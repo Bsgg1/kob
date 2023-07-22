@@ -24,7 +24,7 @@ func GetUserById(c *gin.Context) {
 		c.JSON(200, err)
 		return
 	}
-	if res.Name == "" {
+	if res.Username == "" {
 		c.JSON(200, gin.H{
 			"error": common.UserNotFound,
 		})
@@ -34,28 +34,29 @@ func GetUserById(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	name := c.Query("name")
+	name := c.Query("username")
 	password := c.Query("password")
 	if name == "" || password == "" {
 		c.JSON(200, gin.H{
-			"error":    "valid request",
-			"name":     name,
-			"password": password,
+			"error_message": "valid request",
 		})
 		return
 	}
 	token, err := service.Login(name, password)
 	if err != nil {
-		c.JSON(200, err.Error())
+		c.JSON(200, gin.H{
+			"error_message": err.Error(),
+		})
 		return
 	}
 	c.JSON(200, gin.H{
-		"token": token,
+		"error_message": "success",
+		"token":         token,
 	})
 }
 
 func Register(c *gin.Context) {
-	name := c.PostForm("name")
+	name := c.PostForm("username")
 	psd := c.PostForm("password")
 	repsd := c.PostForm("repassword")
 	if name == "" || psd == "" || repsd == "" || psd != repsd {
@@ -69,5 +70,26 @@ func Register(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{
 		"token": token,
+	})
+}
+
+func GetInfo(c *gin.Context) {
+	userId, ok := c.Get("user_id")
+	if !ok {
+		c.JSON(200, gin.H{
+			"error_message": "id不存在",
+		})
+		return
+	}
+	user, err := service.GetUserById(userId.(int64))
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error_message": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"error_message": "success",
+		"data":          user,
 	})
 }

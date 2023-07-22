@@ -26,7 +26,7 @@ func Login(name string, password string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if res.Name == "" {
+	if res.Username == "" {
 		return "", common.UserNotFound
 	}
 	if res.Password != password {

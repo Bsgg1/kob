@@ -37,6 +37,7 @@ func Run() {
 	auth := r.Group("/auth").Use(middleware.AuthMiddleware())
 	{
 		auth.GET("/all", controller.GetAllUser)
+		auth.GET("/getinfo", controller.GetInfo)
 	}
 	r.Run(":8081") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
