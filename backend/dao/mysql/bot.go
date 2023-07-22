@@ -30,3 +30,15 @@ func UpdateBot(model interface{}, fields map[string]interface{}) error {
 
 	return nil
 }
+
+func RemoveBot(id, userid int64) error {
+	return DB.Where("id = ?", id).Delete(&model.Bot{Userid: userid}).Error
+}
+
+func ListBot(userid int64) ([]*model.Bot, error) {
+	var bots []*model.Bot
+	if err := DB.Where("userid = ?", userid).Find(&bots).Error; err != nil {
+		return nil, err
+	}
+	return bots, nil
+}

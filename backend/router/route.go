@@ -40,6 +40,8 @@ func Run() {
 		auth.GET("/getinfo", controller.GetInfo)
 		auth.POST("/bot/add", controller.AddBot)
 		auth.POST("/bot/update", controller.UpdateBot)
+		auth.POST("/bot/remove", controller.RemoveBot)
+		auth.GET("/bot/list", controller.ListBot)
 	}
 	r.Run(":8081") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
