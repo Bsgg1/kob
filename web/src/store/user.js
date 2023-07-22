@@ -78,6 +78,28 @@ export default {
                 }
             })
         },
+        register(context, data) {
+            $.ajax({
+                url: "http://127.0.0.1:8081/user/register",
+                type: "post",
+                data: {
+                    username: data.username,
+                    password: data.password,
+                    repassword: data.repassword,
+                },
+                success(resp) {
+                    if (resp.error_message === "success") {
+                        context.commit("updateToken", resp.token);
+                        data.success(resp);
+                    } else {
+                        data.error(resp);
+                    }
+                },
+                error(resp) {
+                    console.log(resp);
+                }
+            })
+        },
         logout(context) {
             context.commit("logout");
         }

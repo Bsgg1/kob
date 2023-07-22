@@ -60,16 +60,22 @@ func Register(c *gin.Context) {
 	psd := c.PostForm("password")
 	repsd := c.PostForm("repassword")
 	if name == "" || psd == "" || repsd == "" || psd != repsd {
-		c.JSON(200, "request error")
+		c.JSON(200, gin.H{
+			"error_message": "request error",
+		})
 		return
 	}
 	token, err := service.Register(name, psd)
 	if err != nil {
-		c.JSON(200, err)
+
+		c.JSON(200, gin.H{
+			"error_message": err.Error(),
+		})
 		return
 	}
 	c.JSON(200, gin.H{
-		"token": token,
+		"error_message": "success",
+		"token":         token,
 	})
 }
 
