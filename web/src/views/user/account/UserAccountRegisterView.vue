@@ -70,6 +70,9 @@ export default{
 </script>
 
 <style scoped>
+button{
+    width: 100%;
+}
 .error-message{
     color: red;
 }

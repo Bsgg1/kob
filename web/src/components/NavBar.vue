@@ -33,7 +33,7 @@
           </ul>
         </li>
       </ul>
-      <ul class="navbar-nav" v-else>
+      <ul class="navbar-nav" v-else-if="!$store.state.user.loading">
         <li class="nav-item">
           <router-link class="nav-link" :to="{ name: 'user_login' }" role="button">
             登录

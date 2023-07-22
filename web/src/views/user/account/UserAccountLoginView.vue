@@ -1,5 +1,5 @@
 <template>
-    <ContentField>
+    <ContentField v-if="!$store.state.user.loading">
         <div class="row justify-content-md-center">
             <div class="col-3">
                 <form @submit.prevent="login">
@@ -30,10 +30,27 @@ export default{
         ContentField
     },
     setup() {
+        
         const store = useStore();
         let name = ref('')
         let password = ref('')
         let error_message = ref('')
+        
+        const token = localStorage.getItem("jwt_token");
+        if (token){
+            store.commit("updateToken",token);
+            store.dispatch("getInfo",{
+                success() {
+                    router.push({name:"home"});
+                    store.commit("updateLoading",false);
+                },
+                error() {
+                    store.commit("updateLoading",false);
+                },
+            })
+        } else {
+            store.commit("updateLoading",false);
+        }
         const login =() => {
             error_message.value = "";
             store.dispatch("login",{
@@ -56,7 +73,7 @@ export default{
             name,
             password,
             error_message,
-            login
+            login,
         }
     }
 
