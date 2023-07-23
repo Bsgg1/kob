@@ -18,6 +18,12 @@ func AddBot(c *gin.Context) {
 	title := c.PostForm("title")
 	description := c.PostForm("description")
 	content := c.PostForm("content")
+	if title == "" || description == "" || content == "" {
+		c.JSON(200, gin.H{
+			"error_message": "缺少信息，请检查输入",
+		})
+		return
+	}
 	if err := service.AddBot(&model.Bot{
 		Userid:      userId.(int64),
 		Title:       title,
